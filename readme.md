@@ -1,4 +1,4 @@
-# KingStonOS
+# KingStoneOS
 
 <p align="center">
 <img width="50%" src="PetRock.webp"/>

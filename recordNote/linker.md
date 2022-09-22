@@ -30,3 +30,5 @@ SECTIONS                    /* SECTIONS 지시어는 블록이 섹션 배치 설
     }
 }
 ```
+
+## [Readme로 돌아가기](/readme.md)

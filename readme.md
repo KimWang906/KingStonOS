@@ -23,7 +23,7 @@ chmod +x boot/EntryS_Build.sh
 
 ## Commit Rule
 
-* `Update (fileName)` 파일을 업데이트 하였습니다.
+* `Update (fileName) / Update (text)` 파일을 업데이트 하였습니다.
 * `New (fileName)` 파일이 새로 만들어졌습니다.
 * `fix (fileName, code location)` 코드의 결함을 고쳤습니다.  
 

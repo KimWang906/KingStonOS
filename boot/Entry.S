@@ -1,11 +1,31 @@
 .text
-    .code 32                
+    .code 32
 
     .global vector_start
     .global vector_end
 
-    vector_start:
-        MOV R0, R1
+    vector_start: ; Exception Vector Table
+        LDR     PC, reset_handler_addr
+        LDR     PC, svc_handler_addr
+        LDR     PC, pftch_abt_handler_addr
+        LDR     PC, data_abt_handler_addr
+        B       .
+        LDR     PC, irq_handler_addr
+        LDR     PC, fiq_handler_addr
+
+        reset_handler_addr:     .word reset_handler
+        undef_handler_addr:     .word dummy_handler
+        svc_handler_addr:       .word dummy_handler
+        pftch_abt_handler_addr: .word dummy_handler
+        data_abt_handler_addr:  .word dummy_handler
+        irq_handler_addr:       .word dummy_handler
+        fiq_handler_addr:       .word dummy_handler
     vector_end:
-        .space 1024, 0
+        
+    reset_handler: ; read SYS_ID
+        LDR     R0, =0x100000000
+        LDR     R1, [R0]
+
+    dummy_handler: ; loop
+        B .
 .end

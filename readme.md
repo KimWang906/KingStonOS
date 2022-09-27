@@ -20,6 +20,7 @@ chmod +x boot/EntryS_Build.sh
 
 * [Entry.S](/recordNote/Entry.md)
 * [linker](/recordNote/linker.md)
+* [Booting](/recordNote/booting.md)
 
 ## Commit Rule
 

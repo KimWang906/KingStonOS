@@ -11,6 +11,8 @@ LINKER_SCRIPT = ./KingStone_linker.ld
 ASM_SRCS = $(wildcard boot/*.S)
 ASM_OBJS = $(patsubst boot/%.S, build/%.o, $(ASM_SRCS))
 
+INC_DIRS = include
+
 KingStone = build/KingStone.axf
 KingStone_bin = build/KingStone.bin
 
@@ -36,4 +38,4 @@ $(KingStone): $(ASM_OBJS) $(LINKER_SCRIPT)
 
 build/%.o: boot/%.S
 	mkdir -p $(shell dirname $@)
-	$(AS) -march=$(ARCH) -mcpu=$(MCPU) -g -o $@ $<
+	$(CC) -march=$(ARCH) -mcpu=$(MCPU) -I $(INC_DIRS) -c -g -o $@ $<

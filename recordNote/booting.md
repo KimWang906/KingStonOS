@@ -81,3 +81,43 @@ lr             0x0                 0
 pc             0x40                0x40
 cpsr           0x400001d3          1073742291
 ```
+
+## Stack 구현하기
+
+스택은 **메모리를 반대 방향으로 사용**합니다.  
+**ex)** 0x00009089 주소에 데이터를 쓰면 스택에서는 그다음 0x00009084 주소에 데이터를 씁니다.  
+그래서 스택을 초기화할 때는 아래의 간단한 공식으로 스택 꼭대기 메모리 주소를 구한 다음 그 값을 사용합니다.  
+  
+`스택의 꼭대기 주소 = 스택의 시작 주소 + 스택의 크기 - 4`
+
+### Code
+
+```c
+#define INST_ADDR_START     0                                               // 스택의 시작 주소를 설정합니다.
+#define USRSYS_STACK_START  0x00100000
+#define SVC_STACK_START     0x00300000
+#define IRQ_STACK_START     0x00400000                  
+#define FIQ_STACK_START     0x00500000
+#define ABT_STACK_START     0x00600000
+#define UND_STACK_START     0x00700000
+#define TASK_STACK_START    0x00800000
+#define GLOBAL_ADDR_START   0x04800000
+#define DALLOC_ADDR_START   0x04900000
+
+#define INST_MEM_SIZE       (USRSYS_STACK_START - INST_ADDR_START)          // 스택의 크기를 구합니다.
+#define USRSYS_STACK_SIZE   (SVC_STACK_START - USRSYS_STACK_START)
+#define SVC_STACK_SIZE      (IRQ_STACK_START - SVC_STACK_START)
+#define IRQ_STACK_SIZE      (FIQ_STACK_START- IRQ_STACK_START)
+#define FIQ_STACK_SIZE      (ABT_STACK_START - FIQ_STACK_START)
+#define ABT_STACK_SIZE      (UND_STACK_START - ABT_STACK_START)
+#define UND_STACK_SIZE      (TASK_STACK_START - UND_STACK_START)
+#define TASK_STACK_SIZE     (GLOBAL_ADDR_START - TASK_STACK_START)
+#define DALLOC_MEM_SIZE     (55 * 1024 * 1024)
+                                                                            // 스택의 꼭대기 주소를 구합니다.
+#define USRSYS_STACK_TOP    (USRSYS_STACK_START + USRSYS_STACK_SIZE - 4)    // -4byte는 값을 비우기 위해(padding) 사용하지 않습니다.
+#define SVC_STACK_TOP       (SVC_STACK_START + SVC_STACK_SIZE - 4)          // -4byte로 구분함으로서 스택과 스택 사이를 구분하는 데에 사용하기도 합니다.
+#define IRQ_STACK_TOP       (IRQ_STACK_START + IRQ_STACK_SIZE - 4)
+#define FIQ_STACK_TOP       (FIQ_STACK_START + FIQ_STACK_SIZE - 4)
+#define ABT_STACK_TOP       (ABT_STACK_START + ABT_STACK_SIZE - 4)
+#define UND_STACK_TOP       (UND_STACK_START + UND_STACK_SIZE - 4)
+```

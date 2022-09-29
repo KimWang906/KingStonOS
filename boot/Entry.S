@@ -1,3 +1,6 @@
+#include "ARMv7AR.h"
+#include "MemoryMap.h"
+
 .text
     .code 32
 
@@ -22,9 +25,37 @@
         fiq_handler_addr:       .word dummy_handler
     vector_end:
         
-    reset_handler: ; read SYS_ID
-        LDR     R0, =0x100000000
-        LDR     R1, [R0]
+    reset_handler:
+        MRS r0, cpsr
+        BIC r1, r0, #0x1F
+        ORR r1, r1, #ARM_MODE_BIT_SVC   ; 동작 모드
+        MSR cpsr, r1
+        LDR sp, =IRQ_STACK_TOP          ; =스택 꼭대기의 메모리 주소
+
+        MRS r0, cpsr
+        BIC r1, r0, #0x1F
+        ORR r1, r1, #ARM_MODE_BIT_FIQ
+        MSR cpsr, r1
+        LDR sp, =FIQ_STACK_TOP
+
+        MRS r0, cpsr
+        BIC r1, r0, #0x1F
+        ORR r1, r1, #ARM_MODE_BIT_ABT
+        MSR sp, =ABT_STACK_TOP
+
+
+        MRS r0, cpsr
+        BIC r1, r0, #0x1F
+        ORR r1, r1, #ARM_MODE_BIT_UND
+        MSR cpsr, r1
+        LDR sp, =UND_STACK_TOP
+
+
+        MRS r0, cpsr
+        BIC r1, r0, #0x1F
+        ORR r1, r1, #ARM_MODE_BIT_SYS
+        MSR cpsr, r1
+        LDR sp, =SYS_STACK_TOP
 
     dummy_handler: ; loop
         B .
